@@ -1,54 +1,29 @@
-require 'spree-api-client/error'
-
 module Spree
   module API
     class Client
-      module Request
-        def request(method, path, options = {})
-          token = options.delete(:api_token) || api_token
+      module Connection
+        def connection(options={})
+          options = {
+            # :authenticate     => true,
+            # :force_urlencoded => false,
+            # :raw              => false,
+            # :ssl              => { :verify => false },
+            :url              => api_endpoint,
+            # :path_prefix      => '/api'
+          }.merge(options)
 
-          begin
-            response = connection.send(method) do |request|
+          connection = Faraday.new(options) do |builder|
+            builder.request :json
 
-              request.headers['Accept'] =  options.delete(:accept) || 'application/json'
+            builder.use FaradayMiddleware::FollowRedirects
+            builder.use FaradayMiddleware::Mashify
+            builder.use Faraday::Response::RaiseError
 
-              if token
-                request.headers['X-Spree-Token'] = token
-              end
+            builder.use FaradayMiddleware::ParseJson, :content_type => /\bjson$/
 
-              case method
-              when :get
-                options.merge(:per_page => per_page)
-                request.url(path, options)
-              when :delete, :head
-                request.url(path, options)
-              when :patch, :post, :put
-                request.path = path
-                request.body = MultiJson.dump(options) unless options.empty?
-              end
-            end
-
-          rescue Faraday::Error::ClientError => error
-            raise Spree::API::Client::Error::ClientError.new(error)
+            builder.adapter  Faraday.default_adapter
           end
-
-          response
-        end
-
-        def get(path, options = {})
-          request(:get, path, options).body
-        end
-
-        def post(path, options={})
-          request(:post, path, options).body
-        end
-
-        def put(path, options={})
-          request(:put, path, options).body
-        end
-
-        def delete(path, options={})
-          request(:delete, path, options).body
+          connection
         end
       end
     end
