@@ -4,12 +4,12 @@ module Spree
       module Connection
         def connection(options={})
           options = {
-            :authenticate     => true,
-            :force_urlencoded => false,
-            :raw              => false,
-            :ssl              => { :verify => false },
+            # :authenticate     => true,
+            # :force_urlencoded => false,
+            # :raw              => false,
+            # :ssl              => { :verify => false },
             :url              => api_endpoint,
-            :path_prefix      => '/api'
+            # :path_prefix      => '/api'
           }.merge(options)
 
           connection = Faraday.new(options) do |builder|
