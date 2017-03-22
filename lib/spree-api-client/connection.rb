@@ -9,7 +9,7 @@ module Spree
             # :raw              => false,
             # :ssl              => { :verify => false },
             :url              => api_endpoint,
-            # :path_prefix      => '/api'
+            # :path_prefix      => '/api/v1'
           }.merge(options)
 
           connection = Faraday.new(options) do |builder|

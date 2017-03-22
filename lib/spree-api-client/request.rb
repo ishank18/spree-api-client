@@ -4,7 +4,7 @@ module Spree
   module API
     class Client
       module Request
-        def request(method, path, options = {})
+        def request(method, path, options = {}, params = {})
           token = options.delete(:api_token) || api_token
 
           begin
@@ -35,20 +35,20 @@ module Spree
           response
         end
 
-        def get(path, options = {})
-          request(:get, path, options).body
+        def get(path, options = {}, params={})
+          request(:get, path, options, params).body
         end
 
-        def post(path, options={})
-          request(:post, path, options).body
+        def post(path, options={}, params={})
+          request(:post, path, options, params).body
         end
 
-        def put(path, options={})
-          request(:put, path, options).body
+        def put(path, options={}, params={})
+          request(:put, path, options, params).body
         end
 
-        def delete(path, options={})
-          request(:delete, path, options).body
+        def delete(path, options={}, params={})
+          request(:delete, path, options, params).body
         end
       end
     end

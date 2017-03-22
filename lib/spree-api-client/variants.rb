@@ -2,6 +2,11 @@ module Spree
   module API
     class Client
       module Variants
+
+        def all_variants(options={})
+          get("variants", options)
+        end
+
         def variants(product_id, options={})
           get("products/#{product_id}/variants", options)['variants']
         end
