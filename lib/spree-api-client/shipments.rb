@@ -6,8 +6,8 @@ module Spree
           put("orders/#{order_number}/shipments/#{shipment_id}/ready", options)
         end
 
-        def ship_shipment(order_number, shipment_id, options={})
-          put("orders/#{order_number}/shipments/#{shipment_id}/ship", options)
+        def ship_shipment(shipment_id, options={}, params={})
+          put("/api/v1/shipments/#{shipment_id}/ship", options, params)
         end
       end
     end
