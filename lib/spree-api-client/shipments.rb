@@ -9,6 +9,10 @@ module Spree
         def ship_shipment(shipment_id, options={}, params={})
           put("/api/v1/shipments/#{shipment_id}/ship", options, params)
         end
+
+        def update_shipment(shipment_id, options={}, params={})
+          put("/api/v1/shipments/#{shipment_id}", options, params)
+        end
       end
     end
   end
